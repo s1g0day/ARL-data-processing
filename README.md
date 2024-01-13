@@ -30,3 +30,17 @@ url_file 就是需要批量导入的url文件,一般为根域名。
 至于其他功能都是按需要解开注释使用，但fofa任务需要注意的是fofa api 请求次数过多的话就会导致当天的请求数用完。
 
 finger_add.py使用的是： https://github.com/loecho-sec/ARL-Finger-ADD
+
+## 添加任务
+
+task_add.py 添加任务时默认为所有规则全开
+![image](https://github.com/s1g0day/ARL-data-processing/assets/31206471/8295d5c4-8ca8-49b8-baa0-70ee7d946d4f)
+
+![image](https://github.com/s1g0day/ARL-data-processing/assets/31206471/3e4a4105-72d4-4770-8da0-c35f330cd270)
+
+如果想扫描部分端口的话，修改task_add.py中'port_scan_type'，将all修改为top100或top1000
+
+```
+'port_scan_type': 'top100'    #top100
+'port_scan_type': 'top1000'    #top1000
+'port_scan_type': 'all'    #全端口
