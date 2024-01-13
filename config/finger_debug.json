@@ -1,0 +1,13 @@
+{
+	"fingerprint": [{
+		"cms": "test",
+		"method": "keyword",
+		"location": "body",
+		"keyword": ["/seeyon/USER-DATA/IMAGES/LOGIN/login.gif"]
+	}, {
+		"cms": "test",
+		"method": "keyword",
+		"location": "body",
+		"keyword": ["/seeyon/common/"]
+	}]
+}
