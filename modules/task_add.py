@@ -11,7 +11,7 @@ def task_add_main(url, token, domain):
         'name': domain + "_task",
         'target': domain,
         'domain_brute_type': 'big',
-        'port_scan_type': 'top100',
+        'port_scan_type': 'all',
         'domain_brute': True,
         'alt_dns': True,
         'dns_query_plugin': True,
