@@ -6,18 +6,16 @@ from modules.task_management.del_task import del_task_main
 
 # 这种是先获取所有需要删除的id，然后统一删除。
 def task_delete_main(url, token):
-    print("开始获取所有任务数据")
+    print("开始删除任务")
     task_items, datas = get_task_ids(url, token)
     json_data = {
         "task_id": [
         ],
     }
-    print("开始筛选出 status 为 waiting 的任务ID")
     for index, task in enumerate(task_items):
-        # if task['status'] == "waiting" and "周期任务" in task["name"]:
-        if task['status'] == "stop":
+        if task['status'] == "waiting":
             task_id = task["_id"]
-            print(f"第{index + 1}/{datas}个任务调度 id: {task_id}")
+            # print(f"第{index + 1}/{datas}个任务调度 id: {task_id}")
             json_data["task_id"].append(task_id)    # 追加字符到'_id'键对应的列表中
     '''
     删除任务时需要先停止，在删除

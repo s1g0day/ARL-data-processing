@@ -1,16 +1,15 @@
 from common.logo import logo
-from argparse import ArgumentParser
 from modules.login.Arl_login import arl_login_main
 from modules.login.Token_verification import token_verification_main
 from modules.Fingerprint_management.finger_add import finger_add_main
 from modules.task_management.add_task import task_add_main
-from modules.task_management.task_get import task_get_main
+from modules.task_management.get_task import task_get_main
 from modules.task_management.task_main_delete import task_delete_main
 from modules.task_management.task_main_restart import task_restart_main
 from modules.task_management.add_task_fofa import task_fofa_add_main
 from modules.task_management.task_main_delete import task_custom_delete_main
 from modules.task_management.task_main_restart import task_custom_restart_main
-from modules.scheduled_tasks.task_schedule_add import task_schedule_add_main
+from modules.scheduled_tasks.add_task_schedule import task_schedule_add_main
 from modules.scheduled_tasks.task_schedule_delete import task_schedule_delete_main
 
 def read_url_file(url, url_file, token):
@@ -26,7 +25,9 @@ def read_url_file(url, url_file, token):
         # task_schedule_add_main(url, token, domain)    # 添加计划任务
 
 if __name__ == '__main__':
+
     logo()
+    version = "v0.2.2"
 
     # 登录获取session
     url = "https://192.168.88.21:5003"
@@ -36,34 +37,31 @@ if __name__ == '__main__':
     token = "4cecadff75a525dc965612f729fbca3c"
 
     if token_verification_main(url, token):
-
-        # print("# 获取任务数据")
-        # task_get_main(url, token)
+        print(version)
 
         # print("# 添加指纹")
         # json_file = "config/finger_debug.json"
         # finger_add_main(url, json_file, token)
         
-        # print("# 添加任务、计划任务")
+        # print("# 添加任务")
         # url_file = "config/url_debug.txt"
         # read_url_file(url, url_file, token)
+
+        # print("# 获取任务数据")
+        # task_get_main(url, token)
 
         # print("# 删除任务")
         # task_delete_main(url, token)
 
-        # print("# 删除计划任务")
-        # task_schedule_delete_main(url, token)
-
         # print("# 重启任务")
         # task_restart_main(url, token) 
-        
-        # print("# 停止任务")
-        # task_delete_main(url, token)
-
+   
         # id_file = "config/task_id_debug.txt"
         # print("# 自定义删除任务")
         # task_custom_delete_main(url, id_file, token)
 
         # print("# 自定义重启任务")
         # task_custom_restart_main(url, id_file, token)
-        
+
+        # print("# 删除计划任务")
+        # task_schedule_delete_main(url, token)

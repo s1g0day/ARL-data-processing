@@ -1,4 +1,3 @@
-# 添加ARL计划任务
 import json
 import urllib3
 import requests
@@ -7,6 +6,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 定时任务
 def task_schedule_add_main(url, token, domain):
+    print("添加计划任务")
     # 在每5天的0点10分执行任务 资产发现任务
     task_json_data = {
         'name': domain,
