@@ -34,9 +34,16 @@ finger_add.py使用的是： https://github.com/loecho-sec/ARL-Finger-ADD
 ## 添加任务
 
 task_add.py 添加任务时默认为所有规则全开
+
+
+
 ![image](https://github.com/s1g0day/ARL-data-processing/assets/31206471/8295d5c4-8ca8-49b8-baa0-70ee7d946d4f)
 
+
+
 ![image](https://github.com/s1g0day/ARL-data-processing/assets/31206471/3e4a4105-72d4-4770-8da0-c35f330cd270)
+
+
 
 如果想扫描部分端口的话，修改task_add.py中'port_scan_type'，将all修改为top100或top1000
 
@@ -44,3 +51,17 @@ task_add.py 添加任务时默认为所有规则全开
 'port_scan_type': 'top100'    #top100
 'port_scan_type': 'top1000'    #top1000
 'port_scan_type': 'all'    #全端口
+```
+# 版本更新
+## 已修复或更新
+
+- 0.1 首次完成项目基础功能
+
+- 0.2 修复bug,更新代码结构
+```
+1.当删除的数据较多时,连接就会失效,因此做出修改,将对应的数据按照500页分割进行删除
+```
+
+## 下一步计划
+
+- 0.3 修改modules代码结构,避免大量重复代码
