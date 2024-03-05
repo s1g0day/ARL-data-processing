@@ -14,7 +14,7 @@ def task_delete_main(url, token, task_items, datas):
     for index, task in enumerate(task_items):
         if task['status'] == "waiting":
             task_id = task["_id"]
-            print(f"第{index + 1}/{datas}个任务调度 id: {task_id}, 状态为{task['status']}")
+            print(f"Progress of:{index + 1}/{datas}, id:{task_id}, Status:{task['status']}")
             json_data["task_id"].append(task_id)    # 追加字符到'_id'键对应的列表中
     '''
     删除任务时需要先停止，在删除

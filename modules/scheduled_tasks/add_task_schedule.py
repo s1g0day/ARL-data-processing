@@ -1,12 +1,12 @@
 import math
 import json
+import idna
 import random
 import urllib3
 import requests
 from datetime import datetime, timedelta
 from common.arl_headers import arl_headers_main
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 
 # 定时任务
 def Timed_tasks(url, token, domain, at_regular_time):
@@ -32,8 +32,8 @@ def Timed_tasks(url, token, domain, at_regular_time):
     risk_cruising_response = requests.post(url + '/api/task_schedule/', json=risk_cruising_json_data, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))
     task_data = json.loads(task_response.text)
     risk_cruising_data = json.loads(risk_cruising_response.text)
-    print(domain + "_资产发现任务添加任务状态: " + task_data['message'])
-    print(domain + "_风险巡航任务添加任务状态: " + risk_cruising_data['message'])
+    print(f"Domain:{domain}, Asset_Discovery_Add_status:{task_data['message']}")
+    print(f"Domain:{domain}, Risk_cruising_Add_status:{risk_cruising_data['message']}")
 
 # 周期任务
 def Periodic_tasks(url, token, domain, execution_day):
@@ -72,26 +72,56 @@ def random_time(execution_time):
     
     return execution_time
 
-# 时间转为cron格式
-def datetime_to_cron(date_time):
-    cron_minute = date_time.minute
-    cron_hour = date_time.hour
-    cron_day = date_time.day
-    cron_month = date_time.month
-    cron_weekday = date_time.strftime('%w')  # 周日到周六为 0-6
-    return f"{cron_minute} {cron_hour} {cron_day} {cron_month} {cron_weekday}"
+# 获取随机cron, 每个月随即天数随机日期
+def generate_random_cron():
+    # 获取当前日期和时间
+    now = datetime.now()
+    
+    # 确定月份和日期的范围，允许包括当前月、下个月和下下个月
+    current_month = now.month
+    next_month = (current_month + 1) % 12
+    next_next_month = (current_month + 2) % 12
+    current_day = now.day
+    
+    # 获取本月的最大天数
+    max_day_current_month = (now.replace(day=1, month=next_month) - timedelta(days=1)).day
+    
+    # 生成随机的日期，确保在今天之后
+    month = random.choice([current_month, next_month, next_next_month])
+    day = random.randint(current_day + 1, max_day_current_month)
+    
+    # 生成随机的分钟和小时
+    minute = random.randint(0, 59)
+    hour = random.randint(0, 23)
+    
+    # 组合 cron 表达式
+    cron_expression = f"{minute} {hour} {day} {month} *"
+    
+    return cron_expression
 
 
+# 中文域名转ASCII
+def convert_to_ascii(domain):
+    try:
+        ascii_domain = idna.encode(domain).decode('ascii')
+        return ascii_domain
+    except Exception as e:
+        print("转换失败:", e)
+        return None
+
+def is_chinese_domain(domain):
+    for char in domain:
+        if ord(char) > 127:  # 如果字符的 ASCII 编码大于 127，则说明是非 ASCII 字符，可能是中文字符
+            return True
+    return False
 
 def task_schedule_add_main(url, token, domains):
-    '''
-    每组的前 MAX_DOMAINS_PER_GROUP 个 domain 的 随机 cron 为第二天，接着下一个 MAX_DOMAINS_PER_GROUP个 domain 的 随机 cron 为第三天，以此类推
-    '''
     print("添加计划任务")
     # 每组最多包含的域名数
     MAX_DOMAINS_PER_GROUP = 200    
     
     domain_count = len(domains)
+    # 计算页数 groups
     groups = math.ceil(domain_count / MAX_DOMAINS_PER_GROUP)
     execution_time = datetime.now()  # 初始时间
 
@@ -102,13 +132,21 @@ def task_schedule_add_main(url, token, domains):
         for j, domain in enumerate(group_domains, start=1):
             domain = domain.strip()    
 
+            if is_chinese_domain(domain):
+                # 转换为 ASCII 格式
+                ascii_domain = convert_to_ascii(domain)
+                if ascii_domain:
+                    print("转换后的 ASCII 域名:", ascii_domain)
+                    domain = ascii_domain
+            else:
+                domain = domain
             # 周期任务
-            # cron_format = datetime_to_cron(random_time(execution_time))   # 转换为Cron格式
-            # print(f"\nProcessing domain {j+(i*MAX_DOMAINS_PER_GROUP)}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
-            # Periodic_tasks(url, token, domain, cron_format)   
+            cron_format = generate_random_cron()   # 生成一个随机的 cron 表达式
+            print(f"\nProcessing domain {j+(i*MAX_DOMAINS_PER_GROUP)}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
+            Periodic_tasks(url, token, domain, cron_format)   
 
 
             # 定时任务
-            formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
-            print(f"\nProcessing domain {j+(i*MAX_DOMAINS_PER_GROUP)}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
-            Timed_tasks(url, token, domain, formatted_time)     
+            # formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
+            # print(f"\nProcessing domain {j+(i*MAX_DOMAINS_PER_GROUP)}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
+            # Timed_tasks(url, token, domain, formatted_time)     

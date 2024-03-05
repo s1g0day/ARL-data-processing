@@ -53,6 +53,6 @@ def task_get_main(url, token):
 
         for i in range(len(task_page_data["items"])):
             task = task_page_data["items"][i]
-            print(f"第 {page} 页 第{i} 行数据 id: {task['_id']}, status: {task['status']}, name: {task['name']}, targets: {task['target']}")
+            print(f"Progress of {page}/{i}, id:{task['_id']}, status:{task['status']}, name:{task['name']}, targets:{task['target']}")
             
     return task_items, task_data_number

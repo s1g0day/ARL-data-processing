@@ -16,7 +16,7 @@ def task_schedule_delete_main(url, token):
         # time.sleep(random.random()*3)
        
         task_schedule_id = task_schedule["_id"]
-        # print(f"第{index + 1}/{datas}个任务调度 id: {task_schedule_id}")
+        # print(f"Progress of:{index + 1}/{datas}, id:{task_schedule_id}")
         # 追加字符到'_id'键对应的列表中
         json_data['_id'].append(task_schedule_id)
 

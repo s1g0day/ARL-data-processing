@@ -12,7 +12,7 @@ def task_delete(url, json_data, token):
 
     task_delete_response = requests.post(url + '/api/task/delete/', json=json_data, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))
     task_delete_data = json.loads(task_delete_response.text)
-    print("删除状态: " + task_delete_data['message'])
+    print(f"Delete_status:{task_delete_data['message']}")
 
 # 先处理json_data数据,然后再删除
 def del_task_main(url, json_data, token):

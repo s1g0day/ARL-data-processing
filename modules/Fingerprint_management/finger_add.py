@@ -59,7 +59,7 @@ def add_Finger(name, rule, url, token):
     try:
         response = requests.post(url, data=data_json, headers=headers, verify=False)
         if response.status_code == 200:
-            print(''' Add: [\033[32;1m+\033[0m]  {}\n Rsp: [\033[32;1m+\033[0m] {}'''.format(data_json, response.text))
+            print(f'Add:{data_json}\nRsp:{response.text}')
     except Exception as e:
         print(e)
 

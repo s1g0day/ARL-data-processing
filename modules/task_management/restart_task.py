@@ -9,4 +9,4 @@ def restart_task_main(url, json_data, token):
 
     task_restart_response = requests.post(url + '/api/task/restart/', json=json_data, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))
     task_restart_data = json.loads(task_restart_response.text)
-    print("重启状态: " + task_restart_data['message'])
+    print(f"Restart_status:{task_restart_data['message']}")

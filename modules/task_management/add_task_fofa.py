@@ -17,4 +17,4 @@ def task_fofa_add_main(url, token, domain):
     time.sleep(random.random()*3)
     response = requests.post(url + '/api/task_fofa/submit', json=json_data, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))
     data = json.loads(response.text)
-    print(domain + "_添加fofa任务状态: " + data['message'])
+    print(f"Domain:{domain}, Add_task_fofa_status:{data['message']}")

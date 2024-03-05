@@ -32,7 +32,7 @@ def get_task_ids(url, token):
 
         for i in range(len(task_page_data["items"])):
             task = task_page_data["items"][i]
-            print(f"id: {task['_id']}, status: {task['status']}, name: {task['name']}, targets: {task['target']}")
+            print(f"id:{task['_id']}, status:{task['status']}, name:{task['name']}, targets:{task['target']}")
             
     return task_items, task_data_number
 
