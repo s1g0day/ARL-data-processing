@@ -1,11 +1,10 @@
 import idna
 from common.logo import logo
-from modules.login.Arl_login import arl_login_main
-from modules.login.Token_verification import token_verification_main
+from common.convert_to_ascii import convert_to_ascii, is_chinese_domain
+from modules.login.Arl_login import arl_login_main, token_verification_main
 from modules.Fingerprint_management.finger_add import finger_add_main
 from modules.task_management.add_task import task_add_main
-from modules.task_management.get_task_ids import task_get_main
-from modules.task_management.get_task_ids import get_task_ids
+from modules.task_management.get_task_ids import get_task_ids, task_get_main
 from modules.task_management.task_main_delete import task_delete_main
 from modules.task_management.task_main_restart import task_restart_main
 from modules.task_management.add_task_fofa import task_fofa_add_main
@@ -14,30 +13,22 @@ from modules.task_management.task_main_restart import task_custom_restart_main
 from modules.scheduled_tasks.add_task_schedule import task_schedule_add_main
 from modules.scheduled_tasks.task_schedule_delete import task_schedule_delete_main
 
-# 中文域名转ASCII
-def convert_to_ascii(domain):
-    try:
-        ascii_domain = idna.encode(domain).decode('ascii')
-        return ascii_domain
-    except Exception as e:
-        print("转换失败:", e)
-        return None
+def read_url_file(url, url_file, token, start_index):
 
-def is_chinese_domain(domain):
-    for char in domain:
-        if ord(char) > 127:  # 如果字符的 ASCII 编码大于 127，则说明是非 ASCII 字符，可能是中文字符
-            return True
-    return False
-
-def read_url_file(url, url_file, token):
     with open(url_file, 'r', encoding='utf-8') as domains:
         domain_list = domains.readlines()
         total_domains = len(domain_list)
-    
-    for index, domain in enumerate(domain_list):
-        domain = domain.strip()
-        # print(f"\nProcessing Domain {index+1}/{total_domains}: {domain}")
+    if start_index < 1:
+        start_index = 1
+        print("输入异常, start_index 重置为 1")
+    elif start_index > total_domains:
+        start_index = total_domains
+        print(f"输入异常, start_index 重置为 {total_domains}")
 
+    for index in range(start_index-1, total_domains):
+        domain = domain_list[index].strip()
+        if domain:
+            print(f"\nProcessing Domain {index+1}/{total_domains}: {domain}")
         if is_chinese_domain(domain):
             # 转换为 ASCII 格式
             ascii_domain = convert_to_ascii(domain)
@@ -46,22 +37,25 @@ def read_url_file(url, url_file, token):
                 domain = ascii_domain
         else:
             domain = domain
-        # task_add_main(url, token, domain)                   # 添加任务
+        task_add_main(url, token, domain)                   # 添加任务
         # task_fofa_add_main(url, token, domain)              # 添加fofa任务
     
-    # task_schedule_add_main(url, token, domain_list) # 添加计划任务
+    # 周期任务： cycle  定时任务： calm
+    # Task_Type = "calm"
+    # 策略ID
+    # policy_id = "65fe317b428288ffefde56e3"    
+    # task_schedule_add_main(url, token, policy_id, domain_list, Task_Type, start_index) # 添加计划任务
     
 
 if __name__ == '__main__':
 
     logo()
-    print("version: v0.2.3")
     # 登录获取session
-    # url = "https://192.168.88.21:5003"
+    url = "https://192.168.88.21:5003"
     # username = "admin"
     # password = "123456"
     # token = arl_login_main(url, username, password)
-    token = "a464d45fd5240a1f6d9818b0b009df18"
+    token = "dc56cb8f9167923519953d69c4c3b096"
 
     if token_verification_main(url, token):
         
@@ -70,14 +64,12 @@ if __name__ == '__main__':
         # finger_add_main(url, json_file, token)
         
         # print("# 添加任务")
-        url_file = "config/url_debug.txt"
-        # url_file = "config/url_dev.txt"
-        # url_file = "config/url_schedule.txt"
-        # read_url_file(url, url_file, token)
+        # url_file = "config/1.txt"
+        # start = 1   # 初始为 1
+        # read_url_file(url, url_file, token, start)
 
-        # print("# 获取任务数据")
-        # task_get_main(url, token)
-
+        print("# 获取任务数据")
+        task_get_main(url, token)
         # task_items, datas = get_task_ids(url, token)
 
         # print("# 删除任务")

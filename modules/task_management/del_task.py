@@ -1,4 +1,3 @@
-
 import json
 import urllib3
 import requests
@@ -20,7 +19,6 @@ def del_task_main(url, json_data, token):
     chunk_size = 500
     # 将字典对象转换回 JSON 字符串
     result_json_str = json.dumps(json_data)
-
     # 将字符串解析为字典对象
     data = json.loads(result_json_str)
 

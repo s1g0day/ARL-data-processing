@@ -22,7 +22,6 @@ def del_task_schedule_main(url, json_data, token):
 
     # 如果 result_json_str 的长度小于等于 chunk_size，则不进行拆分
     if len(data['_id']) <= chunk_size:
-
         # 调用任务删除函数
         task_schedule_delete(url, json_data, token)
     else:
@@ -34,7 +33,6 @@ def del_task_schedule_main(url, json_data, token):
         for i, chunk in enumerate(chunks):
             # 创建一个新的字典对象，只包含 "task_id" 键和当前部分的值
             chunk_data = {"_id": chunk}
-            print(chunk_data)
             task_schedule_delete(url, chunk_data, token)
 
             # 显示进度信息

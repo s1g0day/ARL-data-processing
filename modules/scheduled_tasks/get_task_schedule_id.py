@@ -21,7 +21,7 @@ def get_task_schedule_id_main(url, token):
 
     # 计算页数，可以直接指定total_pages = 10 删除10页内容
     total_pages = math.ceil(task_schedule_data_number / 10)
-
+    # total_pages = 20
     task_schedule_ids = []
     for page in range(1, total_pages + 1):
         task_schedule_params['page'] = str(page)

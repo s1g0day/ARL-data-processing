@@ -53,6 +53,7 @@ def task_get_main(url, token):
 
         for i in range(len(task_page_data["items"])):
             task = task_page_data["items"][i]
-            print(f"Progress of {page}/{i}, id:{task['_id']}, status:{task['status']}, name:{task['name']}, targets:{task['target']}")
+            print(f"Progress of page:{page}, id:{task['_id']}, status:{task['status']}, name:{task['name']}, targets:{task['target']}")
+            task_items.append(task)
             
     return task_items, task_data_number

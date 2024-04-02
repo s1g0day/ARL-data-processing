@@ -1,21 +1,22 @@
 import math
 import json
-import idna
+import time
 import random
 import urllib3
 import requests
 from datetime import datetime, timedelta
 from common.arl_headers import arl_headers_main
+from common.convert_to_ascii import convert_to_ascii,is_chinese_domain
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 定时任务
-def Timed_tasks(url, token, domain, at_regular_time):
+def Timed_tasks(url, token, policy_id, domain, at_regular_time):
     # 资产发现任务
     task_json_data = {
         'name': domain,
         'target': domain,
         'schedule_type': 'future_scan',
-        'policy_id': '65d45e5d18e4a412dc848cce',
+        'policy_id': policy_id,
         'start_date': at_regular_time,
         'task_tag': 'task',
     }
@@ -24,7 +25,7 @@ def Timed_tasks(url, token, domain, at_regular_time):
         'name': domain,
         'target': domain,
         'schedule_type': 'future_scan',
-        'policy_id': '65d45e5d18e4a412dc848cce',
+        'policy_id': policy_id,
         'start_date': at_regular_time,
         'task_tag': 'risk_cruising',
     }
@@ -36,13 +37,13 @@ def Timed_tasks(url, token, domain, at_regular_time):
     print(f"Domain:{domain}, Risk_cruising_Add_status:{risk_cruising_data['message']}")
 
 # 周期任务
-def Periodic_tasks(url, token, domain, execution_day):
+def Periodic_tasks(url, token, policy_id, domain, execution_day):
     # 资产发现任务
     task_json_data = {
         'name': domain,
         'target': domain,
         'schedule_type': 'recurrent_scan',
-        'policy_id': '65d45e5d18e4a412dc848cce',
+        'policy_id': policy_id,
         'cron': execution_day,
         'task_tag': 'task',
     }
@@ -51,7 +52,7 @@ def Periodic_tasks(url, token, domain, execution_day):
         'name': domain,
         'target': domain,
         'schedule_type': 'recurrent_scan',
-        'policy_id': '65d45e5d18e4a412dc848cce',
+        'policy_id': policy_id,
         'cron': execution_day,
         'task_tag': 'risk_cruising',
     }
@@ -59,8 +60,8 @@ def Periodic_tasks(url, token, domain, execution_day):
     risk_cruising_response = requests.post(url + '/api/task_schedule/', json=risk_cruising_json_data, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))
     task_data = json.loads(task_response.text)
     risk_cruising_data = json.loads(risk_cruising_response.text)
-    print(domain + "_资产发现任务添加任务状态: " + task_data['message'])
-    print(domain + "_风险巡航任务添加任务状态: " + risk_cruising_data['message'])
+    print(f"Domain:{domain}, Asset_Discovery_Add_status:{task_data['message']}")
+    print(f"Domain:{domain}, Risk_cruising_Add_status:{risk_cruising_data['message']}")
 
 # 获取随机 时分秒
 def random_time(execution_time):
@@ -73,7 +74,7 @@ def random_time(execution_time):
     return execution_time
 
 # 获取随机cron, 每个月随即天数随机日期
-def generate_random_cron():
+def generate_random_all_cron():
     # 获取当前日期和时间
     now = datetime.now()
     
@@ -99,23 +100,23 @@ def generate_random_cron():
     
     return cron_expression
 
+# 获取随机cron
+def generate_random_cron(execution_time):
+    
+    # 确定月份和日期
+    current_month = execution_time.month
+    current_day = execution_time.day
 
-# 中文域名转ASCII
-def convert_to_ascii(domain):
-    try:
-        ascii_domain = idna.encode(domain).decode('ascii')
-        return ascii_domain
-    except Exception as e:
-        print("转换失败:", e)
-        return None
+    # 生成随机的分钟和小时
+    current_hour = random.randint(0, 23)
+    current_minute = random.randint(0, 59)
 
-def is_chinese_domain(domain):
-    for char in domain:
-        if ord(char) > 127:  # 如果字符的 ASCII 编码大于 127，则说明是非 ASCII 字符，可能是中文字符
-            return True
-    return False
+    # 组合 cron 表达式
+    cron_expression = f"{current_minute} {current_hour} {current_day} {current_month} *"
 
-def task_schedule_add_main(url, token, domains):
+    return cron_expression
+
+def task_schedule_add_main(url, token, policy_id, domains, Task_Type, start_index):
     print("添加计划任务")
     # 每组最多包含的域名数
     MAX_DOMAINS_PER_GROUP = 200    
@@ -140,13 +141,19 @@ def task_schedule_add_main(url, token, domains):
                     domain = ascii_domain
             else:
                 domain = domain
-            # 周期任务
-            cron_format = generate_random_cron()   # 生成一个随机的 cron 表达式
-            print(f"\nProcessing domain {j+(i*MAX_DOMAINS_PER_GROUP)}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
-            Periodic_tasks(url, token, domain, cron_format)   
+            
+            if (i * MAX_DOMAINS_PER_GROUP + j) >= start_index:  # 检查是否达到指定的起始索引
+                if Task_Type == "cycle":
+                    # 周期任务
+                    # cron_format = generate_random_cron(execution_time)   # 生成一个随机的 cron 
+                    cron_format = generate_random_all_cron()   # 生成一个随机的 cron 表达式
+                    print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
+                    # Periodic_tasks(url, token, policy_id, domain, cron_format)   
 
+                elif Task_Type == "calm":
+                    # 定时任务
+                    formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
+                    print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
+                    Timed_tasks(url, token, policy_id, domain, formatted_time)
+                    time.sleep(random.random()*10)
 
-            # 定时任务
-            # formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
-            # print(f"\nProcessing domain {j+(i*MAX_DOMAINS_PER_GROUP)}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
-            # Timed_tasks(url, token, domain, formatted_time)     
