@@ -1,4 +1,3 @@
-import idna
 from common.logo import logo
 from common.convert_to_ascii import convert_to_ascii, is_chinese_domain
 from modules.login.Arl_login import arl_login_main, token_verification_main
