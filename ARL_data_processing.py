@@ -2,6 +2,7 @@ from common.logo import logo
 from common.convert_to_ascii import convert_to_ascii, is_chinese_domain
 from modules.login.Arl_login import arl_login_main, token_verification_main
 from modules.Fingerprint_management.finger_add import finger_add_main
+from modules.Fingerprint_management.finger_add import finger_update_data
 from modules.task_management.add_task import task_add_main
 from modules.task_management.get_task_ids import get_task_ids, task_get_main
 from modules.task_management.task_main_delete import task_delete_main
@@ -36,43 +37,47 @@ def read_url_file(url, url_file, token, start_index):
                 domain = ascii_domain
         else:
             domain = domain
-        task_add_main(url, token, domain)                   # 添加任务
+        # task_add_main(url, token, domain)                   # 添加任务
         # task_fofa_add_main(url, token, domain)              # 添加fofa任务
     
     # 周期任务： cycle  定时任务： calm
-    # Task_Type = "calm"
+    Task_Type = "calm"
     # 策略ID
-    # policy_id = "65fe317b428288ffefde56e3"    
-    # task_schedule_add_main(url, token, policy_id, domain_list, Task_Type, start_index) # 添加计划任务
+    policy_id = "65fe317b428288ffefde56e3"    
+    task_schedule_add_main(url, token, policy_id, domain_list, Task_Type, start_index) # 添加计划任务
     
 
 if __name__ == '__main__':
 
     logo()
     # 登录获取session
-    url = "https://192.168.88.21:5003"
+    # url = "https://gh3487tgjg89743trs.698v7jradg11es12.top/"
+    url = "https://g378rtsugghsgh83.698v7jradg11es12.top/"
+    # url = "https://192.168.88.21:5003"
     # username = "admin"
-    # password = "123456"
+    # password = "Adm1n@123"
     # token = arl_login_main(url, username, password)
-    token = "dc56cb8f9167923519953d69c4c3b096"
+    token = "eaf6454f77dcfc5f850e4154d31bc69a"
 
     if token_verification_main(url, token):
         
         # print("# 添加指纹")
-        # json_file = "config/finger_dev.json"
-        # finger_add_main(url, json_file, token)
-        
+        # finger_dev_file = "config/finger_dev.json"
+        # finger_add_main(url, finger_dev_file, token)
+        # finger_arl_file = "config/finger_arl.yaml"
+        # finger_update_data(url, finger_arl_file, token)
+
         # print("# 添加任务")
-        # url_file = "config/1.txt"
+        # url_file = "config/url_dev.txt"
         # start = 1   # 初始为 1
         # read_url_file(url, url_file, token, start)
 
-        print("# 获取任务数据")
-        task_get_main(url, token)
-        # task_items, datas = get_task_ids(url, token)
+        # print("# 获取任务数据")
+        # task_get_main(url, token)
+        task_items, datas = get_task_ids(url, token)
 
         # print("# 删除任务")
-        # task_delete_main(url, token, task_items, datas)
+        task_delete_main(url, token, task_items, datas)
 
         # print("# 删除计划任务")
         # task_schedule_delete_main(url, token)

@@ -26,7 +26,22 @@ url_file 就是需要批量导入的url文件,一般为根域名。
 
 至于其他功能都是按需要解开注释使用，但fofa任务需要注意的是fofa api 请求次数过多的话就会导致当天的请求数用完。
 
-finger_add.py使用的是： https://github.com/loecho-sec/ARL-Finger-ADD
+## 添加指纹
+
+代码参考：https://github.com/loecho-sec/ARL-Finger-ADD
+
+```
+# print("# 添加指纹")
+# finger_dev_file = "config/finger_dev.json"
+# finger_add_main(url, finger_dev_file, token)
+```
+
+符合ARL格式的数据：https://github.com/adysec/ARL/blob/master/tools/%E6%8C%87%E7%BA%B9%E6%95%B0%E6%8D%AE.json
+
+```
+# finger_arl_file = "config/finger_arl.yaml"
+# finger_update_data(url, finger_arl_file, token)
+```
 
 ## 添加任务
 
