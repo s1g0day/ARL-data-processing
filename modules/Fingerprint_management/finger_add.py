@@ -1,10 +1,11 @@
 import json
+import yaml
 import urllib3
 import requests
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def finger_add_main(url, json_file, token):
-    f = open(json_file,'r', encoding="utf-8")
+def finger_add_main(url, finger_file, token):
+    f = open(finger_file,'r', encoding="utf-8")
     content =f.read()
     load_dict = json.loads(content)
         #dump_dict = json.dump(f)
@@ -42,6 +43,16 @@ def finger_add_main(url, json_file, token):
                     rule = hash.format(finger_json['keyword'][0])
                 add_Finger(name, rule, url, token)
 
+def finger_update_data(url, finger_file, token):
+
+    # 加载配置
+    push_config = yaml.safe_load(open(finger_file, "r", encoding="utf-8").read())
+
+    print("共检测到", len(push_config['finger_arl']), "个指纹")
+
+    for i in range(len(push_config['finger_arl'])):
+        add_Finger(push_config['finger_arl'][i]['name'], push_config['finger_arl'][i]['rule'], url, token)
+        
 def add_Finger(name, rule, url, token):
     headers = {
         "Accept": "application/json, text/plain, */*",
@@ -58,8 +69,10 @@ def add_Finger(name, rule, url, token):
 
     try:
         response = requests.post(url, data=data_json, headers=headers, verify=False)
-        if response.status_code == 200:
-            print(f'Add:{data_json}\nRsp:{response.text}')
+        if response.status_code==200:
+            print(f"[+] 指纹:'{name}'\t规则:{rule}")
+        else:
+            print(f"[-] 指纹:'{name}'\t上传失败")
     except Exception as e:
         print(e)
 

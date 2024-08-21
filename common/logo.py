@@ -8,6 +8,6 @@ def logo():
          |___/                   |___/ 
                                        
 Powered by S1g0Day
-          version: v0.2.4
+          version: v0.2.5
 --------------------------------------
     ''')

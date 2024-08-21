@@ -2,6 +2,7 @@ from common.logo import logo
 from common.convert_to_ascii import convert_to_ascii, is_chinese_domain
 from modules.login.Arl_login import arl_login_main, token_verification_main
 from modules.Fingerprint_management.finger_add import finger_add_main
+from modules.Fingerprint_management.finger_add import finger_update_data
 from modules.task_management.add_task import task_add_main
 from modules.task_management.get_task_ids import get_task_ids, task_get_main
 from modules.task_management.task_main_delete import task_delete_main
@@ -44,7 +45,6 @@ def read_url_file(url, url_file, token, start_index):
     # 策略ID
     # policy_id = "65fe317b428288ffefde56e3"    
     # task_schedule_add_main(url, token, policy_id, domain_list, Task_Type, start_index) # 添加计划任务
-    
 
 if __name__ == '__main__':
 
@@ -59,15 +59,17 @@ if __name__ == '__main__':
     if token_verification_main(url, token):
         
         # print("# 添加指纹")
-        # json_file = "config/finger_dev.json"
-        # finger_add_main(url, json_file, token)
-        
+        # finger_dev_file = "config/finger_dev.json"
+        # finger_add_main(url, finger_dev_file, token)
+        # finger_arl_file = "config/finger_arl.yaml"
+        # finger_update_data(url, finger_arl_file, token)
+		
         # print("# 添加任务")
-        # url_file = "config/1.txt"
+        # url_file = "config/url_dev.txt"
         # start = 1   # 初始为 1
         # read_url_file(url, url_file, token, start)
 
-        print("# 获取任务数据")
+        # print("# 获取任务数据")
         task_get_main(url, token)
         # task_items, datas = get_task_ids(url, token)
 
