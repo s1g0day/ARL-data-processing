@@ -7,12 +7,12 @@ from common.arl_headers import arl_headers_main
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # fofa 任务下发
-def task_fofa_add_main(url, token, domain):
+def task_fofa_add_main(url, token, policy_id, domain):
 
     json_data = {
         'name': domain + "_task_fofa",
         'query': domain,
-        'policy_id': '658e21403ad7ec59a44fc30a',
+        'policy_id': policy_id,
     }
     time.sleep(random.random()*3)
     response = requests.post(url + '/api/task_fofa/submit', json=json_data, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))

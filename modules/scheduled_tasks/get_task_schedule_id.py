@@ -6,10 +6,11 @@ from common.arl_headers import arl_headers_main
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 获取任务ID
-def get_task_schedule_id_main(url, token):
+def get_task_schedule_id_main(url, token, status):
     task_schedule_params = {
         'size': '10',
         'page': '1',
+        'schedule_status': status,
     }
 
     task_schedule_response = requests.get(url + '/api/task_schedule/', params=task_schedule_params, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))

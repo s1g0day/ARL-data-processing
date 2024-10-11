@@ -6,10 +6,11 @@ from common.arl_headers import arl_headers_main
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 获取页数
-def Get_Page_Count(url, token):
+def Get_Page_Count(url, token, status):
     task_params = {
         'size': '10',
         'page': '1',
+        'status': status,
     }
     task_response = requests.get(url + '/api/task/', params=task_params, headers=arl_headers_main(url,token), verify=False, timeout=(4,20))
     task_data = json.loads(task_response.text)
@@ -24,9 +25,9 @@ def Get_Page_Count(url, token):
     return total_pages, task_data_number, task_params
 
 # 获取任务ID
-def get_task_ids(url, token):
+def get_task_ids(url, token, status):
 
-    total_pages, task_data_number, task_params = Get_Page_Count(url, token)
+    total_pages, task_data_number, task_params = Get_Page_Count(url, token, status)
 
     # 获取 items 数据，返回总数据
     task_items = []
@@ -41,8 +42,8 @@ def get_task_ids(url, token):
     return task_items, task_data_number
 
 # 获取任务ID, 逐条打印数据
-def task_get_main(url, token):
-    total_pages, task_data_number, task_params = Get_Page_Count(url, token)
+def task_get_main(url, token, status):
+    total_pages, task_data_number, task_params = Get_Page_Count(url, token, status)
 
     # 获取 items 数据,逐条打印数据
     task_items = []

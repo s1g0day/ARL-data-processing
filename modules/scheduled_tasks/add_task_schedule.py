@@ -145,15 +145,22 @@ def task_schedule_add_main(url, token, policy_id, domains, Task_Type, start_inde
             if (i * MAX_DOMAINS_PER_GROUP + j) >= start_index:  # 检查是否达到指定的起始索引
                 if Task_Type == "cycle":
                     # 周期任务
-                    # cron_format = generate_random_cron(execution_time)   # 生成一个随机的 cron 
                     cron_format = generate_random_all_cron()   # 生成一个随机的 cron 表达式
                     print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
-                    # Periodic_tasks(url, token, policy_id, domain, cron_format)   
+                    Periodic_tasks(url, token, policy_id, domain, cron_format)   
 
                 elif Task_Type == "calm":
                     # 定时任务
                     formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
                     print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
                     Timed_tasks(url, token, policy_id, domain, formatted_time)
-                    time.sleep(random.random()*10)
+                elif Task_Type == "all":
+                    # 执行周期任务和定时任务
+                    cron_format = generate_random_all_cron()   # 生成一个随机的 cron 表达式
+                    print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
+                    Periodic_tasks(url, token, policy_id, domain, cron_format)
+					
+                    formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
+                    print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
+                    Timed_tasks(url, token, policy_id, domain, formatted_time)
 
