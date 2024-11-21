@@ -72,12 +72,12 @@ def process_tasks(url, token, task_add, policy_id, domain_list, start_index):
                 domain = ascii_domain
 
         if task_add == 'normal':
-            task_add_main(url, token, domain)
+            task_add_main(url, token, domain, index + 1)
         elif task_add == 'fofa':
-            task_fofa_add_main(url, token, policy_id, domain)
+            task_fofa_add_main(url, token, policy_id, domain, index + 1)
         elif task_add == 'all':
-            task_add_main(url, token, domain)
-            task_fofa_add_main(url, token, policy_id, domain)
+            task_add_main(url, token, domain, index + 1)
+            task_fofa_add_main(url, token, policy_id, domain, index + 1)
 
 if __name__ == '__main__':
     logo()
