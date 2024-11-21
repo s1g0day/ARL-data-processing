@@ -7,10 +7,10 @@ from common.arl_headers import arl_headers_main
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # fofa 任务下发
-def task_fofa_add_main(url, token, policy_id, domain):
+def task_fofa_add_main(url, token, policy_id, domain, index):
 
     json_data = {
-        'name': domain + "_task_fofa",
+        'name': domain + "_task_fofa_" + str(index),
         'query': domain,
         'policy_id': policy_id,
     }
