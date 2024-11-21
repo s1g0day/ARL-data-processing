@@ -5,10 +5,10 @@ from common.arl_headers import arl_headers_main
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 添加任务
-def task_add_main(url, token, domain):
+def task_add_main(url, token, domain, index):
 
     json_data = {
-        'name': domain + "_task",
+        'name': domain + "_task_" + str(index),
         'target': domain,
         'domain_brute_type': 'big',
         'port_scan_type': 'all',
