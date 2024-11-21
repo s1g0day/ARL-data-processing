@@ -10,10 +10,10 @@ from common.convert_to_ascii import convert_to_ascii,is_chinese_domain
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 定时任务
-def Timed_tasks(url, token, policy_id, domain, at_regular_time):
+def Timed_tasks(url, token, policy_id, domain, at_regular_time, index):
     # 资产发现任务
     task_json_data = {
-        'name': domain,
+        'name': domain + "_task_" + str(index),
         'target': domain,
         'schedule_type': 'future_scan',
         'policy_id': policy_id,
@@ -22,7 +22,7 @@ def Timed_tasks(url, token, policy_id, domain, at_regular_time):
     }
     # 风险巡航任务
     risk_cruising_json_data = {
-        'name': domain,
+        'name': domain + "_risk_cruising_" + str(index),
         'target': domain,
         'schedule_type': 'future_scan',
         'policy_id': policy_id,
@@ -37,10 +37,10 @@ def Timed_tasks(url, token, policy_id, domain, at_regular_time):
     print(f"Domain:{domain}, Risk_cruising_Add_status:{risk_cruising_data['message']}")
 
 # 周期任务
-def Periodic_tasks(url, token, policy_id, domain, execution_day):
+def Periodic_tasks(url, token, policy_id, domain, execution_day, index):
     # 资产发现任务
     task_json_data = {
-        'name': domain,
+        'name': domain + "_task_" + str(index),
         'target': domain,
         'schedule_type': 'recurrent_scan',
         'policy_id': policy_id,
@@ -49,7 +49,7 @@ def Periodic_tasks(url, token, policy_id, domain, execution_day):
     }
     # 风险巡航任务
     risk_cruising_json_data = {
-        'name': domain,
+        'name': domain + "_risk_cruising_" + str(index),
         'target': domain,
         'schedule_type': 'recurrent_scan',
         'policy_id': policy_id,
@@ -147,20 +147,20 @@ def task_schedule_add_main(url, token, policy_id, domains, Task_Type, start_inde
                     # 周期任务
                     cron_format = generate_random_all_cron()   # 生成一个随机的 cron 表达式
                     print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
-                    Periodic_tasks(url, token, policy_id, domain, cron_format)   
+                    Periodic_tasks(url, token, policy_id, domain, cron_format, i * MAX_DOMAINS_PER_GROUP + j)   
 
                 elif Task_Type == "calm":
                     # 定时任务
                     formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
                     print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
-                    Timed_tasks(url, token, policy_id, domain, formatted_time)
+                    Timed_tasks(url, token, policy_id, domain, formatted_time, i * MAX_DOMAINS_PER_GROUP + j)
                 elif Task_Type == "all":
                     # 执行周期任务和定时任务
                     cron_format = generate_random_all_cron()   # 生成一个随机的 cron 表达式
                     print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {cron_format}")
-                    Periodic_tasks(url, token, policy_id, domain, cron_format)
+                    Periodic_tasks(url, token, policy_id, domain, cron_format, i * MAX_DOMAINS_PER_GROUP + j)
 					
                     formatted_time = random_time(execution_time).strftime('%Y-%m-%d %H:%M:%S')
                     print(f"\nProcessing domain {i * MAX_DOMAINS_PER_GROUP + j}/{domain_count}, Domain: {domain}, Execution Time: {formatted_time}")
-                    Timed_tasks(url, token, policy_id, domain, formatted_time)
+                    Timed_tasks(url, token, policy_id, domain, formatted_time, i * MAX_DOMAINS_PER_GROUP + j)
 
