@@ -89,7 +89,6 @@ if __name__ == '__main__':
     parser.add_argument('--start', default=1, type=int, help='设置任务初始位置')
     parser.add_argument('--task_schedule_add', choices=['cycle', 'calm', 'all'], help='执行添加计划任务类型')
     parser.add_argument('--task_get', action='store_true', help='执行获取数据任务')
-    parser.add_argument('--task_status', default='', help='设置任务状态')
     parser.add_argument('--task_delete', action='store_true', help='执行删除任务')
     parser.add_argument('--task_schedule_delete', action='store_true', help='执行删除计划任务')
     parser.add_argument('--task_restart', action='store_true', help='执行重启任务')
@@ -99,7 +98,7 @@ if __name__ == '__main__':
     parser.add_argument('--finger_file', default="config/finger.json", help='配置指纹文件')
     parser.add_argument('--url_file', default="config/url.txt", help='配置目标文件')
     parser.add_argument('--task_id_file', default="config/task_id.txt", help='配置任务ID文件')
-
+    parser.add_argument('--task_status', default='', help="任务状态筛选。示例:查询指定状态: --status waiting, 排除指定状态: --status no_done")
     args = parser.parse_args()
     
     print(f"Load config file: {args.config}")
