@@ -212,6 +212,9 @@ python3 .\ARL_data_processing.py --task_get
 
 # 获取所有状态为done的任务数据
 python3 .\ARL_data_processing.py --task_get --task_status done
+
+# 获取所有状态不为done的任务数据
+python3 .\ARL_data_processing.py --task_get --task_status no_done
 ```
 
 ## 删除普通或fofa任务数据
@@ -224,6 +227,9 @@ python3 .\ARL_data_processing.py --task_delete
 
 # 删除所有状态为done的任务
 python3 .\ARL_data_processing.py --task_delete --task_status done
+
+# 删除所有状态不为done的任务数据
+python3 .\ARL_data_processing.py --task_delete --task_status no_done
 ```
 
 根据任务ID删除任务
@@ -247,6 +253,9 @@ python3 .\ARL_data_processing.py --task_schedule_delete
 
 # 删除所有状态为done的任务
 python3 .\ARL_data_processing.py --task_schedule_delete --task_status done
+
+# 删除所有状态不为done的任务
+python3 .\ARL_data_processing.py --task_schedule_delete --task_status no_done
 ```
 
 ## 重启任务
@@ -257,6 +266,9 @@ python3 .\ARL_data_processing.py --task_restart
 
 # 重启所有状态为done的任务
 python3 .\ARL_data_processing.py --task_restart --task_status done
+
+# 重启所有状态不为done的任务
+python3 .\ARL_data_processing.py --task_restart --task_status no_done
 ```
 
 根据任务ID重启任务
