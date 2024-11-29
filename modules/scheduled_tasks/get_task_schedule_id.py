@@ -33,8 +33,9 @@ def get_schedule_count(url, token, status):
     }
     
     if status.startswith("no_"):
-        excluded_status = status[3:]
-        available_status = [s for s in ALL_STATUS if s != excluded_status]
+        # 处理多个排除状态，用逗号分隔
+        excluded_statuses = status[3:].split(',')
+        available_status = [s for s in ALL_STATUS if s not in excluded_statuses]
         
         total_number = 0
         for current_status in available_status:
